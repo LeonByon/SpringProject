@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- MyBatis는 SQL을 분리하여 별도의 XML 파일에 저장한다. -->
+<mapper namespace="sample">
+	<select id="selectBoardList" parameterType="hashmap" resultType="hashmap">
+	   <![CDATA[
+	   	SELECT
+	   		NUM,
+	   		TITLE,
+	   		NAME,
+	   		INDATE,
+	   		VIEWS
+	   	FROM
+	   		SHARE_BOARD
+	   	ORDER BY NUM DESC
+	   ]]>
+	</select>
+</mapper>
