@@ -15,37 +15,36 @@
 				<col width="35%"/>
 			</colgroup>
 			<caption>게시글 상세</caption>
-			<tbody>
-				<tr>
-					<th scope="row">글 번호</th>
-					<td>
-						${map.NUM }
-						<input type="hidden" id="NUM" name="NUM" value="${map.NUM }">
-					</td>
-					<th scope="row">조회수</th>
-					<td>${map.VIEWS }</td>
-				</tr>
-				<tr>
-					<th scope="row">작성자</th>
-					<td>${map.NAME }</td>
-					<th scope="row">작성시간</th>
-					<td>${map.INDATE }</td>
-				</tr>
-				<tr>
-					<th scope="row">제목</th>
-					<td colspan="3">
-						<input type="text" id="TITLE" NAME="TITLE" CLASS="wdp_90" value="${map.TITLE }"/>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="4" class="view_text">
-						<textarea rows="20" cols="100" title="내용" id="CONTENT" NAME="CONTENT">${map.CONTENT}</textarea>
-					</td>
-				</tr>
-			</tbody>
+            <tbody>
+                <tr>
+                    <th scope="row">글 번호</th>
+                    <td>
+                        ${map.IDX }
+                        <input type="hidden" id="IDX" name="IDX" value="${map.IDX }">
+                    </td>
+                    <th scope="row">조회수</th>
+                    <td>${map.HIT_CNT }</td>
+                </tr>
+                <tr>
+                    <th scope="row">작성자</th>
+                    <td>${map.CREA_ID }</td>
+                    <th scope="row">작성시간</th>
+                    <td>${map.CREA_DTM }</td>
+                </tr>
+                <tr>
+                    <th scope="row">제목</th>
+                    <td colspan="3">
+                        <input type="text" id="TITLE" name="TITLE" class="wdp_90" value="${map.TITLE}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="view_text">
+                        <textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS">${map.CONTENTS}</textarea>
+                    </td>
+                </tr>
+            </tbody>
 		</table>
 	</form>
-</body>
 
 <a href="#this" class="btn" id="list">목록으로</a>
 <a href="#this" class="btn" id="update">저장하기</a>
@@ -85,8 +84,9 @@
 	function fn_deleteBoard(){
 		var comSubmit = new ComSubmit();
 		comSubmit.setUrl("<c:url value='/sample/deleteBoard.do' />");
-		comSubmit.addParam("NUM",$("#NUM").val());
+		comSubmit.addParam("IDX", $("#IDX").val());
 		comSubmit.submit();
 	}
 </script>
+</body>
 </html>

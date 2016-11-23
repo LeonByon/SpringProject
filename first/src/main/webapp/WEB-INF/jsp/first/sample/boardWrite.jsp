@@ -20,14 +20,20 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="view_text">
-						<textarea rows="20" cols="100" title="내용" id="CONTENT" name="CONTENT"></textarea>
+						<textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<input type="file" name="file">
+		<div id="fileDiv">
+			<p>
+				<input type="file" name="file" name="file_0">
+				<a href="#this" class="btn" id="delete" name="delete">삭제</a>
+			</p>
+		</div>
+		
 		<br/><br/>
-
+		<a href="#this" class="btn" id="addFile">파일 추가</a>
 		<a href="#this" class="btn" id="write" >작성하기</a>
 		<a href="#this" class="btn" id="list" >목록으로</a>
 	</form>
@@ -42,6 +48,10 @@
 			$("#list").on("click", function(e){ //목록으로 버튼
 				e.preventDefault();
 				fn_openBoardList();
+			});
+			$("#addFile").on("click", function(e){
+				e.preventDefault();
+				fn_addFile();
 			});
 
 		});
