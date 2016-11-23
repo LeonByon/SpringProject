@@ -16,7 +16,7 @@
 	   ]]>
 	</select>
 
-	<insert id="insertBoard" parameterType="hashmap" >
+	<insert id="insertBoard" parameterType="hashmap">
 	    <![CDATA[
 	    	INSERT INTO SHARE_BOARD
 	    	(
@@ -37,5 +37,78 @@
 	    		'Admin'
 	    	)
 	    ]]>
+	    </insert>
+
+		<update id="updateviews" parameterType="hashmap">
+	    <![CDATA[
+	    	UPDATE SHARE_BOARD
+	    	SET
+	    		VIEWS = NVL(VIEWS, 0) + 1
+	    	WHERE
+	    		NUM = #{NUM}
+	    ]]>
+		</update>
+
+	<select id="selectBoardDetail" parameterType="hashmap" resultType="hashmap">
+	   <![CDATA[
+	   	SELECT
+	   		NUM,
+	   		TITLE,
+	   		NAME,
+	   		INDATE,
+	   		CONTENT,
+	   		VIEWS
+	   	FROM
+	   		SHARE_BOARD
+	   	WHERE
+	   		NUM = #{NUM}
+	   ]]>
+	</select>
+
+	<update id="updateBoard" parameterType="hashmap">
+	    <![CDATA[
+	        UPDATE SHARE_BOARD
+	        SET
+	            TITLE = #{TITLE},
+	            CONTENT = #{CONTENT}
+	        WHERE
+	            NUM = #{NUM}
+	    ]]>
+	</update>
+
+	<delete id="deleteBoard" parameterType="hashmap">
+	    <![CDATA[
+	        DELETE
+	        FROM
+	            SHARE_BOARD
+	        WHERE
+	            NUM = #{NUM}
+	    ]]>
+	</delete>
+
+	<insert id="insertFile" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
+	    <selectKey keyProperty="IDX" resultType="string" order="BEFORE">
+	        SELECT SEQ_SHARE_BOARD_NUM.NEXTVAL FROM DUAL
+	    </selectKey>
+		<![CDATA[
+			INSERT INTO TB_FILE
+			(
+				IDX,
+				BOARD_IDX,
+				ORIGINAL_FILE_NAME,
+				STORED_FILE_NAME,
+				FILE_SIZE,
+				CREA_ID
+			)
+			VALUES
+			(
+				SEQ_TB_FILE_IDX.NEXTVAL,
+				#{BOARD_IDX},
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{FILE_SIZE},
+				'Admin'
+			)
+		]]>
 	</insert>
 </mapper>
