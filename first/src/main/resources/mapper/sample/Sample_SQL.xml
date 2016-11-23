@@ -15,4 +15,27 @@
 	   	ORDER BY NUM DESC
 	   ]]>
 	</select>
+
+	<insert id="insertBoard" parameterType="hashmap" >
+	    <![CDATA[
+	    	INSERT INTO SHARE_BOARD
+	    	(
+	    		NUM,
+	    		TITLE,
+	    		CONTENT,
+	    		VIEWS,
+	    		INDATE,
+	    		NAME
+	    	)
+	    	VALUES
+	    	(
+	    		SEQ_SHARE_BOARD_NUM.NEXTVAL,
+	    		#{TITLE},
+	    		#{CONTENT},
+	    		0,
+	    		SYSDATE,
+	    		'Admin'
+	    	)
+	    ]]>
+	</insert>
 </mapper>
