@@ -14,6 +14,7 @@ function ComSubmit(opt_formId) {
 	this.url = "";
 
 	if(this.formId == "commonForm"){
+		//$("#"+this.formId).empty();
 		$("#commonForm")[0].reset();
 	}
 
@@ -30,5 +31,6 @@ function ComSubmit(opt_formId) {
 		frm.action = this.url;
 		frm.method = "post";
 		frm.submit();
+		$("#"+this.formId).empty();
 	};
 }

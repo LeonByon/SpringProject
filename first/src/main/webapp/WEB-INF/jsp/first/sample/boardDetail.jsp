@@ -17,7 +17,7 @@
         <tbody>
             <tr>
                 <th scope="row">글 번호</th>
-                <td>${map.TITLE }</td>
+                <td>${map.IDX }</td>
                 <th scope="row">조회수</th>
                 <td>${map.HIT_CNT }</td>
             </tr>
@@ -38,9 +38,11 @@
             	<th scope="row">첨부파일</td>
             	<td colspan="3">
             		<c:forEach var="row" items="${list}">
+            			<div>
             			<input type="hidden" id="IDX" value="${row.IDX}">
             			<a href="#this" name="file">${row.ORIGINAL_FILE_NAME}</a>
             			(${row.FILE_SIZE}kb)
+            			</div>
             		</c:forEach>
             	</td>
             </tr>
@@ -62,7 +64,7 @@
 				e.preventDefault();
 				fn_openBoardUpdate();
 			});
-			
+
 			$("a[name='file']").on("click", function(e){ //파일 이름
 				e.preventDefault();
 				fn_downloadFile($(this));
@@ -82,7 +84,7 @@
             comSubmit.addParam("IDX", idx);
 			comSubmit.submit();
 		}
-		
+
 		function fn_downloadFile(obj){
 			var idx = obj.parent().find("#IDX").val();
 			var comSubmit = new ComSubmit();

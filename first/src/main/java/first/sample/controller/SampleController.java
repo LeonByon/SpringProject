@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import first.common.common.CommandMap;
 import first.sample.service.SampleService;
 
@@ -30,13 +31,14 @@ public class SampleController {
 
     //DispatcherServlet은 이 어노테이션을 기준으로 어떤 컨트롤러의 메서드가 호출되어야 할지를 결정
     @RequestMapping(value="/sample/openBoardList.do")//실행될 주소
-    public ModelAndView openSampleBoardList(Map<String,Object> commandMap) throws Exception{
+    public ModelAndView openSampleBoardList(CommandMap commandMap) throws Exception{
     	ModelAndView mv = new ModelAndView("/sample/boardList");
     	//우리가 화면에 보여줄 jsp파일을 의미한다.
 
-        List<Map<String,Object>> list = sampleService.selectBoardList(commandMap);
+        Map<String,Object> resultMap = sampleService.selectBoardList(commandMap.getMap());
         //서비스 로직의 결과를 ModelAndView 객체에 담어서 클라이언트, 즉 jsp에서 그 결과를 사용 할 수 있도록 한다.
-        mv.addObject("list",list);
+        mv.addObject("paginationInfo", (PaginationInfo)resultMap.get("paginationInfo"));
+        mv.addObject("list", resultMap.get("result"));
         return mv;
     }
 
@@ -86,16 +88,17 @@ public class SampleController {
     	ModelAndView mv = new ModelAndView("/first/sample/boardUpdate");
 
     	Map<String,Object> map = sampleService.selectBoardDetail(commandMap.getMap());
-    	mv.addObject("map", map);
+    	mv.addObject("map", map.get("map"));
+    	mv.addObject("list",map.get("list"));
 
     	return mv;
     }
 
     @RequestMapping(value="/sample/updateBoard.do")
-    public ModelAndView updateBoard(CommandMap commandMap) throws Exception{
+    public ModelAndView updateBoard(CommandMap commandMap, HttpServletRequest request) throws Exception{
     	ModelAndView mv = new ModelAndView("redirect:/sample/openBoardDetail.do");
 
-    	sampleService.updateBoard(commandMap.getMap());
+    	sampleService.updateBoard(commandMap.getMap(), request);
 
     	mv.addObject("IDX",commandMap.get("IDX"));
 

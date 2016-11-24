@@ -25,7 +25,7 @@
     <tbody>
         <c:choose>
             <c:when test="${fn:length(list) > 0}">
-                <c:forEach items="${list}" var="row">
+                <c:forEach items="${list}" var="row" varStatus="status">
                     <tr>
                             <td>${row.IDX }</td>
                             <td class="title">
@@ -45,6 +45,12 @@
         </c:choose>
     </tbody>
 </table>
+
+<c:if test="${not empty paginationInfo}">
+	<ui:pagination paginationInfo="${paginationInfo}" type="text" jsFunction="fn_search"/>
+</c:if>
+<input type="hidden" id="currentPageNo" name="currentPageNo" />
+
 <br/>
 <a href="#this" class="btn" id="write">글쓰기</a>
 
@@ -73,6 +79,13 @@
 		comSubmit.setUrl("<c:url value='/sample/openBoardDetail.do' />");
 		//jQuert를 이용하여 선택된 <a> 태그의 부모 노드 내에서 num 이라는 값을 가진 태그를 찾아서, 그 태그의 값을 가져오도록 한다.
 		comSubmit.addParam("IDX", obj.parent().find("#IDX").val());
+		comSubmit.submit();
+	}
+
+	function fn_search(pageNo){
+		var comSubmit = new ComSubmit();
+		comSubmit.setUrl("<c:url value='/sample/openBoardList.do' />");
+		comSubmit.addParam("currentPageNo", pageNo);
 		comSubmit.submit();
 	}
 </script>
