@@ -36,11 +36,11 @@
 	    ]]>
 	</update>
 
-	<delete id="deleteBoard" parameterType="hashmap">
+	<update id="deleteBoard" parameterType="hashmap">
 	    <![CDATA[
         UPDATE TB_BOARD SET DEL_GB = 'Y' WHERE IDX = #{IDX}
 	    ]]>
-	</delete>
+	</update>
 
 	<insert id="insertFile" parameterType="hashmap">
 		<![CDATA[
@@ -114,4 +114,57 @@
     <include refid="common.pagingPost"/>
 	</select>
 
+	<insert id="reInsert" parameterType="hashmap">
+		<selectKey resultType="String" keyProperty="RENO" order="BEFORE">
+       		SELECT NVL(MAX(RENO),0)+1 FROM TB_BOARDREPLY
+   		</selectKey>
+
+		<![CDATA[
+			INSERT INTO TB_BOARDREPLY
+			(
+				BRDNO,
+				RENO,
+				REWRITER,
+				DELGB,
+				RECONTENT,
+				REINDATE
+			)
+			VALUES
+			(
+				#{IDX},
+				#{RENO},
+				#{REWRITER},
+				'N',
+				#{RECONTENT},
+				SYSDATE
+			)
+		]]>
+	</insert>
+
+	<update id="reUpdate" parameterType="hashmap">
+	    UPDATE TB_BOARDREPLY
+	       SET RECONTENT=#{RECONTENT}
+	     WHERE RENO=#{RENO}
+	</update>
+
+	<select id="reList" parameterType="hashmap" resultType="hashmap">
+    <![CDATA[
+        SELECT
+            RENO,
+            REWRITER,
+            RECONTENT,
+            REINDATE,
+            DELGB
+        FROM
+            TB_BOARDREPLY
+        WHERE
+            BRDNO = #{IDX}
+            AND
+            DELGB = 'N'
+    ]]>
+	</select>
+
+	<update id="deleteRelist" parameterType="hashmap">
+	    <![CDATA[UPDATE TB_BOARDREPLY SET DELGB = 'Y' WHERE RENO = #{RENO}]]>
+	</update>
 </mapper>

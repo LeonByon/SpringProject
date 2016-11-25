@@ -52,6 +52,27 @@
 	<a href="#this" class="btn" id="list">목록으로</a>
 	<a href="#this" class="btn" id="update">수정하기</a>
 
+	<p>&nbsp;</p>
+	<form name="frm" id="frm">
+		<div style="border: 1px solid; width: 600px; padding: 5px">
+	        <input type="hidden" id="IDX" value="${map.IDX}">
+	       	 작성자: <input type="text" id = "REWRITER" name="REWRITER" size="20" maxlength="20"> <br/>
+	        <textarea name="RECONTENT" id="RECONTENT" rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
+	        <a href="#this" class="btn" id="rewrite">저장</a>
+		</div>
+	</form>
+
+	<c:forEach var="relist" items="${relist}" varStatus="status">
+	    <div style="border: 1px solid gray; width: 600px; padding: 5px; margin-top: 5px;">
+	    	<input type="hidden" id="RENO" value="${relist.RENO}">
+	        <div>${relist.REWRITER}</div>
+	        <div>${relist.REINDATE}</div>
+	        <div>${relist.RECONTENT}</div>
+	        <br/>
+	        <a href="#this" class="btn" id="redelete" name="redelete">삭제</a>
+	    </div>
+	</c:forEach>
+
 	<%@ include file="/WEB-INF/include/include-body.jspf" %>
 	<script>
 		$(document).ready(function(){
@@ -68,6 +89,16 @@
 			$("a[name='file']").on("click", function(e){ //파일 이름
 				e.preventDefault();
 				fn_downloadFile($(this));
+			});
+
+			$("#rewrite").on("click", function(e){
+				e.preventDefault();
+				fn_reInsert();
+			});
+
+			$("a[name='redelete']").on("click", function(e){
+				e.preventDefault();
+				fn_reDelete($(this));
 			});
 		});
 
@@ -89,6 +120,24 @@
 			var idx = obj.parent().find("#IDX").val();
 			var comSubmit = new ComSubmit();
 			comSubmit.setUrl("<c:url value='/common/downloadFile.do' />");
+			comSubmit.addParam("IDX",idx);
+			comSubmit.submit();
+		}
+
+		function fn_reInsert(){
+			var idx = "${map.IDX}";
+			var comSubmit = new ComSubmit("frm");
+			comSubmit.setUrl("<c:url value='/sample/reInsert.do' />");
+			comSubmit.addParam("IDX",idx);
+			comSubmit.submit();
+		}
+
+		function fn_reDelete(obj){
+			var idx = "${map.IDX}";
+			var reno = obj.parent().find("#RENO").val();
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/sample/deleteRelist.do' />");
+			comSubmit.addParam("RENO",reno);
 			comSubmit.addParam("IDX",idx);
 			comSubmit.submit();
 		}

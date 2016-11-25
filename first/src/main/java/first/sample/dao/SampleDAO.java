@@ -55,4 +55,21 @@ public class SampleDAO extends AbstractDAO{
 	public void updateFile(Map<String, Object> map) throws Exception{
 	    update("sample.updateFile", map);
 	}
+
+	public void reInsert(Map<String, Object> map) {
+		insert("sample.reInsert",map);
+	}
+
+	public void reUpdate(Map<String, Object> map) {
+		insert("sample.reUpdate",map);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String,Object>> reList(Map<String,Object> map){
+		return (List<Map<String,Object>>)selectList("sample.reList",map);
+	}
+
+	public void deleteRelist(Map<String,Object> map){
+		update("sample.deleteRelist",map);
+	}
 }

@@ -79,6 +79,7 @@ public class SampleController {
     	Map<String,Object> map = sampleService.selectBoardDetail(commandMap.getMap());
     	mv.addObject("map",map.get("map"));
     	mv.addObject("list", map.get("list"));
+    	mv.addObject("relist", map.get("relist"));
 
     	return mv;
     }
@@ -110,6 +111,28 @@ public class SampleController {
     	ModelAndView mv = new ModelAndView("redirect:/sample/openBoardList.do");
 
     	sampleService.deleteBoard(commandMap.getMap());
+
+    	return mv;
+    }
+
+    @RequestMapping(value="/sample/reInsert.do")
+    public ModelAndView reInsert(CommandMap commandMap) throws Exception{
+    	ModelAndView mv = new ModelAndView("redirect:/sample/openBoardDetail.do");
+
+    	sampleService.reInsert(commandMap.getMap());
+
+    	mv.addObject("IDX",commandMap.get("IDX"));
+
+    	return mv;
+    }
+
+    @RequestMapping(value="/sample/deleteRelist.do")
+    public ModelAndView deleteRelist(CommandMap commandMap) throws Exception{
+    	ModelAndView mv = new ModelAndView("redirect:/sample/openBoardDetail.do");
+
+    	sampleService.deleteRelist(commandMap.getMap());
+
+    	mv.addObject("IDX",commandMap.get("IDX"));
 
     	return mv;
     }

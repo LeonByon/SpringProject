@@ -18,4 +18,8 @@ public interface SampleService{
 
 	void deleteBoard(Map<String, Object> map);
 
+	void reInsert(Map<String, Object> map) throws Exception;
+
+	void deleteRelist(Map<String, Object> map);
+
 }

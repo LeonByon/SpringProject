@@ -65,13 +65,18 @@ public class SampleServiceImpl implements SampleService{
 
 	@Override
 	public Map<String,Object> selectBoardDetail(Map<String,Object> map) throws Exception{
+		if(map.get("flag") != null){
 		sampleDAO.updateViews(map);
+		}
 		Map<String,Object> resultMap = new HashMap<String, Object>();
 		Map<String,Object> tempMap = sampleDAO.selectBoardDetail(map);
 		resultMap.put("map", tempMap);
 
 		List<Map<String,Object>> list = sampleDAO.selectFileList(map);
 		resultMap.put("list", list);
+
+		List<Map<String,Object>> relist = sampleDAO.reList(map);
+		resultMap.put("relist", relist);
 
 		return resultMap;
 	}
@@ -98,4 +103,18 @@ public class SampleServiceImpl implements SampleService{
 		sampleDAO.deleteBoard(map);
 	}
 
+	@Override
+	public void reInsert(Map<String, Object> map) throws Exception{
+		if((map.get("RENO")==null) || ("".equals(map.get("RENO")))){
+			sampleDAO.reInsert(map);
+		}else{
+			sampleDAO.reUpdate(map);
+		}
+	}
+
+	@Override
+	public void deleteRelist(Map<String, Object> map){
+		log.debug(map.toString());
+		sampleDAO.deleteRelist(map);
+	}
 }
