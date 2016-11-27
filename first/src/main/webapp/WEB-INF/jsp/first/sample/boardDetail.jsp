@@ -53,26 +53,37 @@
 	<a href="#this" class="btn" id="update">수정하기</a>
 
 	<p>&nbsp;</p>
-	<form name="frm" id="frm">
-		<div style="border: 1px solid; width: 600px; padding: 5px">
+	<div style="border: 1px solid; width: 600px; padding: 5px">
+		<form name="frm" id="frm">
 	        <input type="hidden" id="IDX" value="${map.IDX}">
 	       	 작성자: <input type="text" id = "REWRITER" name="REWRITER" size="20" maxlength="20"> <br/>
 	        <textarea name="RECONTENT" id="RECONTENT" rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
 	        <a href="#this" class="btn" id="rewrite">저장</a>
-		</div>
-	</form>
+		</form>
+	</div>
 
 	<c:forEach var="relist" items="${relist}" varStatus="status">
 	    <div style="border: 1px solid gray; width: 600px; padding: 5px; margin-top: 5px;">
 	    	<input type="hidden" id="RENO" value="${relist.RENO}">
 	        <div>${relist.REWRITER}</div>
 	        <div>${relist.REINDATE}</div>
-	        <div>${relist.RECONTENT}</div>
+	        <div id="reply${relist.RENO}">${relist.RECONTENT}</div>
 	        <br/>
 	        <a href="#this" class="btn" id="redelete" name="redelete">삭제</a>
+	        <a href="#this" class="btn" id="reUpForm" name="reUpForm">수정</a>
 	    </div>
 	</c:forEach>
 
+	<div id="replyDiv" style="width: 99%; display:none">
+		<form name="frm2" id="frm2">
+			<input type="hidden" name="BRDNO" value="${map.IDX}">
+			<input type="hidden" name="RENO">
+			<textarea rows="3" cols="60" maxlength="500" name="RECONTENT"></textarea>
+			<a href="#this" class="btn" id="reUpSave">저장</a>
+			<a href="#this" class="btn" id="reUpCancel">취소</a>
+		</form>
+	</div>
+	
 	<%@ include file="/WEB-INF/include/include-body.jspf" %>
 	<script>
 		$(document).ready(function(){
@@ -99,6 +110,21 @@
 			$("a[name='redelete']").on("click", function(e){
 				e.preventDefault();
 				fn_reDelete($(this));
+			});
+			
+			$("a[name='reUpForm']").on("click", function(e){
+				e.preventDefault();
+				fn_reUpForm($(this));
+			});
+			
+			$("#reUpSave").on("click", function(e){
+				e.preventDefault();
+				fn_reUpSave();
+			});
+			
+			$("#reUpCancel").on("click", function(e){
+				e.preventDefault();
+				fn_reUpCancel();
 			});
 		});
 
@@ -140,6 +166,48 @@
 			comSubmit.addParam("RENO",reno);
 			comSubmit.addParam("IDX",idx);
 			comSubmit.submit();
+		}
+		
+		var updateReno = updateRecontent = null;
+		function fn_reUpForm(obj){
+			var reno = obj.parent().find("#RENO").val();
+			var form = document.frm2;
+			var reply = document.getElementById("reply"+reno);
+			var replyDiv = document.getElementById("replyDiv");
+			replyDiv.style.display = "";
+			
+			if(updateReno){
+				document.body.appendChild(replyDiv);
+				var oldReno = document.getElementById("reply"+updateReno);
+				oldReno.innerText = updateRecontent;
+			}
+			
+			form.RENO.value = reno;
+			form.RECONTENT.value = reply.innerText;
+			reply.innerText = "";
+			reply.appendChild(replyDiv);
+			updateReno = reno;
+			updateRecontent = form.RECONTENT.value;
+			form.RECONTENT.focus();
+		}
+		
+		function fn_reUpSave(){
+			var idx = "${map.IDX}";
+			var comSubmit = new ComSubmit("frm2");
+			comSubmit.setUrl("<c:url value='/sample/reInsert.do' />");
+			comSubmit.addParam("IDX",idx);
+			comSubmit.submit();
+		}
+		
+		function fn_reUpCancel(){
+			var form = document.form2;
+			var replyDiv = document.getElementById("replyDiv");
+			document.body.appendChild(replyDiv);
+			replyDiv.style.display = "none";
+			
+			var oldReno = document.getElementById("reply"+updateReno);
+			oldReno.innerText = updateRecontent;
+			updateReno = updateRecontent = null;
 		}
 	</script>
 </body>

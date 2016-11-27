@@ -32,7 +32,7 @@ public class SampleController {
     //DispatcherServlet은 이 어노테이션을 기준으로 어떤 컨트롤러의 메서드가 호출되어야 할지를 결정
     @RequestMapping(value="/sample/openBoardList.do")//실행될 주소
     public ModelAndView openSampleBoardList(CommandMap commandMap) throws Exception{
-    	ModelAndView mv = new ModelAndView("/sample/boardList");
+    	ModelAndView mv = new ModelAndView("/first/sample/boardList");
     	//우리가 화면에 보여줄 jsp파일을 의미한다.
 
         Map<String,Object> resultMap = sampleService.selectBoardList(commandMap.getMap());
