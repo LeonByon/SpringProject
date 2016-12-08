@@ -68,9 +68,9 @@ public class AbstractDAO {
 		Map<String,Object> map = (Map<String,Object>)params;
 		PaginationInfo paginationInfo = null;
 
-		if(map.containsKey("currentPageNo") == false || StringUtils.isEmpty(map.get("currentPageNo")) == true)
+		if(map.containsKey("currentPageNo") == false || StringUtils.isEmpty(map.get("currentPageNo")) == true){
 			map.put("currentPageNo","1");
-
+		}
 		paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(Integer.parseInt(map.get("currentPageNo").toString()));
 		if(map.containsKey("PAGE_ROW") == false || StringUtils.isEmpty(map.get("PAGE_ROW")) == true){

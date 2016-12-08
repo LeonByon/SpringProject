@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import first.common.utils.FileUtils;
 import first.sample.dao.SampleDAO;
 
@@ -35,6 +36,11 @@ public class SampleServiceImpl implements SampleService{
 	}
 
 	@Override
+	public Map<String, Object> searchList(Map<String, Object> map) throws Exception{
+		return sampleDAO.searchList(map);
+	}
+
+	@Override
 	public void insertBoard(Map<String, Object> map, HttpServletRequest request) throws Exception {
 		sampleDAO.insertBoard(map);
 
@@ -53,6 +59,7 @@ public class SampleServiceImpl implements SampleService{
 	            log.debug("------------- file start -------------");
 	            log.debug("name : "+multipartFile.getName());
 	            log.debug("filename : "+multipartFile.getOriginalFilename());
+	            log.debug("type : "+multipartFile.getContentType());
 	            log.debug("size : "+multipartFile.getSize());
 	            log.debug("-------------- file end --------------\n");
 			}

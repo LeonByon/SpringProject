@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- productMapper.xml  -->
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="cart">
+<!--장바구니에 추가  -->
+	<insert id="cartAdd">
+	insert into cart values
+   ( (select nvl(max(idx)+1,1) from cart), #{userid}, #{product_id}, #{amount})
+	</insert>
+
+	<!--결과물이 DTO타입  -->
+	<!--CartDTO 클래스의 alias를 mybatis-config.xml에 설정해야 함  -->
+	<!--resultType에 com.example.web04.model.shop.dto.CartDTO를 지정해 주어야 함  -->
+	<select id="cartList" resultType="first.common.dto.CartDTO">
+	select * from cart_v where userid=#{userid}
+	</select>
+
+	<!-- 장바구니 개별 삭제  -->
+	<delete id="cartDel">
+	delete from cart where idx=#{idx}
+	</delete>
+
+	<delete id="cartDelAll">
+	delete from cart where userid=#{userid}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

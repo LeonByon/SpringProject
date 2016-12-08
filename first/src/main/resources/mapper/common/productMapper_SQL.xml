@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- productMapper.xml  -->
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="product">
+<!--상품 목록  -->
+	<select id="productList" resultType="first.common.dto.ProductDTO">
+	select * from product order by product_name
+	</select>
+
+<!--상품 상세 정보  -->
+	<select id="product_detail" resultType="first.common.dto.ProductDTO">
+	select * from product where product_id=#{product_id}
+	</select>
+
+	<insert id="productInsert">
+	insert into product values
+	( (select nvl(max(product_id)+1,1) from product ),#{product_name},#{price},#{description},#{picture_url} )
+	</insert>
+
+	<update id="productUpdate">
+	update product set product_name=#{product_name}
+		, price=#{price}, description=#{description}
+		, picture_url=#{picture_url}
+	where product_id=#{product_id}
+	</update>
+	<!--상품 삭제  -->
+	<delete id="productDelete">
+	delete from product where product_id=#{product_id}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

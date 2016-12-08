@@ -18,6 +18,11 @@ public class SampleDAO extends AbstractDAO{
 		return (Map<String, Object>)selectPagingList("sample.selectBoardList", map);
 	}
 
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> searchList(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>)selectPagingList("sample.searchList", map);
+	}
+
 	public void insertBoard(Map<String, Object> map) throws Exception{
 		insert("sample.insertBoard", map);
 	}
@@ -72,4 +77,5 @@ public class SampleDAO extends AbstractDAO{
 	public void deleteRelist(Map<String,Object> map){
 		update("sample.deleteRelist",map);
 	}
+
 }

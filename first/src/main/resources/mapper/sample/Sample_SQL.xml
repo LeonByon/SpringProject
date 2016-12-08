@@ -8,7 +8,7 @@
 		    	SELECT SEQ_TB_BOARD_IDX.NEXTVAL FROM DUAL
 		    </selectKey>
 		    <![CDATA[
-		    	INSERT INTO TB_BOARD(IDX,TITLE,CONTENTS,HIT_CNT,DEL_GB,CREA_DTM,CREA_ID) VALUES(#{IDX},#{TITLE},#{CONTENTS},0,'N',SYSDATE,'Admin')
+		    	INSERT INTO TB_BOARD(IDX,TITLE,CONTENTS,HIT_CNT,DEL_GB,CREA_DTM,CREA_ID,STAR) VALUES(#{IDX},#{TITLE},#{CONTENTS},0,'N',SYSDATE,#{CREA_ID},#{STAR})
 		    ]]>
 		</insert>
 
@@ -20,7 +20,7 @@
 
 	<select id="selectBoardDetail" parameterType="hashmap" resultType="hashmap">
 	   <![CDATA[
-        SELECT IDX,HIT_CNT,CREA_ID,CREA_DTM,TITLE,CONTENTS FROM TB_BOARD WHERE IDX = #{IDX}
+        SELECT IDX,HIT_CNT,CREA_ID,CREA_DTM,TITLE,CONTENTS,STAR FROM TB_BOARD WHERE IDX = #{IDX}
 	   ]]>
 	</select>
 
@@ -30,7 +30,8 @@
 	    		TB_BOARD
 	    		SET
 	    			TITLE=#{TITLE},
-	    			CONTENTS=#{CONTENTS}
+	    			CONTENTS=#{CONTENTS},
+	    			STAR=#{STAR}
 	    		WHERE
 	    			IDX=#{IDX}
 	    ]]>
@@ -105,11 +106,34 @@
             IDX,
             TITLE,
             HIT_CNT,
-            CREA_DTM
+            CREA_ID,
+            CREA_DTM,
+            STAR
         FROM
             TB_BOARD
         WHERE
             DEL_GB = 'N'
+    ]]>
+    <include refid="common.pagingPost"/>
+	</select>
+
+	<select id="searchList" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+    <![CDATA[
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY IDX DESC) RNUM,
+            IDX,
+            TITLE,
+            HIT_CNT,
+            CREA_ID,
+            CREA_DTM,
+            STAR
+        FROM
+            TB_BOARD
+        WHERE
+            DEL_GB = 'N'
+            AND
+            ${keyField} like '%${keyWord}%'
     ]]>
     <include refid="common.pagingPost"/>
 	</select>

@@ -22,4 +22,6 @@ public interface SampleService{
 
 	void deleteRelist(Map<String, Object> map);
 
+	Map<String, Object> searchList(Map<String, Object> map) throws Exception;
+
 }

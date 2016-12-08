@@ -19,6 +19,23 @@
 					<td><input type="text" id="TITLE" name="TITLE" class="wdp_90"></input></td>
 				</tr>
 				<tr>
+					<th scope="row">글쓴이</th>
+					<td><input type="hidden" id="CREA_ID" name="CREA_ID" class="wdp_90" value="${sessionScope.id}"></input>${sessionScope.id}</td>
+				</tr>
+
+				<tr>
+					<th scope="row">별점</th>
+					<td>
+						<p class="star_rating">
+						    <a href="#" class="on">★</a>
+						    <a href="#" class="on">★</a>
+						    <a href="#" class="on">★</a>
+						    <a href="#">★</a>
+						    <a href="#">★</a>
+						</p>
+					</td>
+				</tr>
+				<tr>
 					<td colspan="2" class="view_text">
 						<textarea rows="20" cols="100" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
 					</td>
@@ -42,6 +59,10 @@
 	<script>
 	//파일의 크기나 유효성 검사도 하지 않았으며, 추가할 수 있는 파일의 개수도 제한하지 않았다.
 	//또한 파일의 전송에 따라서 파일의 순서가 바뀔수도 있기 때문에, 첨부파일의 순서를 지정하는 작업도 필요하다.
+		if(${sessionScope.id eq null}){
+			alert("누구냐 넌");
+			location.href = '/first/member/login.do';
+		}
 		var gfv_count = 1;
 
 		$(document).ready(function(){
@@ -61,6 +82,11 @@
 				e.preventDefault();
 				fn_deleteFile($(this));
 			});
+			$( ".star_rating a" ).click(function() {
+			     $(this).parent().children("a").removeClass("on");
+			     $(this).addClass("on").prevAll("a").addClass("on");
+			     return false;
+			});
 		});
 
 		function fn_openBoardList(){
@@ -70,8 +96,21 @@
 		}
 
 		function fn_insertBoard(){
-			var comSubmit = new ComSubmit("frm");
+
+		    if (frm.TITLE.value=="") {
+		        alert("글 제목을 입력해주세요.");
+		        frm.TITLE.focus();
+		        return;
+		    }
+		    if (frm.CONTENTS.value=="") {
+		        alert("글 내용을 입력해주세요.");
+		        frm.CONTENTS.focus();
+		        return;
+		    }
+		    var starVal = $('.on').length;
+ 			var comSubmit = new ComSubmit("frm");
 			comSubmit.setUrl("<c:url value='/sample/insertBoard.do' />");
+			comSubmit.addParam("STAR",starVal);
 			comSubmit.submit();
 		}
 

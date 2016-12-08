@@ -28,6 +28,16 @@
                 <td>${map.CREA_DTM }</td>
             </tr>
             <tr>
+               	<th scope="row">별점</th>
+               	<td colspan="3">
+               		<p class="star_rating">
+                           <c:forEach begin="1" end="${map.STAR}" step="1">
+							<a href="#" class="on">★</a>
+						</c:forEach>
+					</p>
+               	</td>
+            </tr>
+            <tr>
                 <th scope="row">제목</th>
                 <td colspan="3">${map.TITLE}</td>
             </tr>
@@ -56,7 +66,7 @@
 	<div style="border: 1px solid; width: 600px; padding: 5px">
 		<form name="frm" id="frm">
 	        <input type="hidden" id="IDX" value="${map.IDX}">
-	       	 작성자: <input type="text" id = "REWRITER" name="REWRITER" size="20" maxlength="20"> <br/>
+	       	 작성자: <input type="hidden" id = "REWRITER" name="REWRITER" size="20" maxlength="20" value="${sessionScope.id}">${sessionScope.id}<br/>
 	        <textarea name="RECONTENT" id="RECONTENT" rows="3" cols="60" maxlength="500" placeholder="댓글을 달아주세요."></textarea>
 	        <a href="#this" class="btn" id="rewrite">저장</a>
 		</form>
@@ -65,6 +75,7 @@
 	<c:forEach var="relist" items="${relist}" varStatus="status">
 	    <div style="border: 1px solid gray; width: 600px; padding: 5px; margin-top: 5px;">
 	    	<input type="hidden" id="RENO" value="${relist.RENO}">
+	    	<input type="hidden" id="REWRITER2" value="${relist.REWRITER}">
 	        <div>${relist.REWRITER}</div>
 	        <div>${relist.REINDATE}</div>
 	        <div id="reply${relist.RENO}">${relist.RECONTENT}</div>
@@ -83,9 +94,10 @@
 			<a href="#this" class="btn" id="reUpCancel">취소</a>
 		</form>
 	</div>
-	
+
 	<%@ include file="/WEB-INF/include/include-body.jspf" %>
 	<script>
+
 		$(document).ready(function(){
 			$("#list").on("click",function(e){
 				e.preventDefault();
@@ -108,20 +120,22 @@
 			});
 
 			$("a[name='redelete']").on("click", function(e){
+				var rewriter = $(this).parent().find("#REWRITER2").val();
 				e.preventDefault();
-				fn_reDelete($(this));
+				fn_reDelete($(this),rewriter);
 			});
-			
+
 			$("a[name='reUpForm']").on("click", function(e){
 				e.preventDefault();
-				fn_reUpForm($(this));
+				var rewriter = $(this).parent().find("#REWRITER2").val();
+				fn_reUpForm($(this),rewriter);
 			});
-			
+
 			$("#reUpSave").on("click", function(e){
 				e.preventDefault();
 				fn_reUpSave();
 			});
-			
+
 			$("#reUpCancel").on("click", function(e){
 				e.preventDefault();
 				fn_reUpCancel();
@@ -129,17 +143,21 @@
 		});
 
 		function fn_openBoardList(){
-			var comSubmit = new ComSubmit();
+ 			var comSubmit = new ComSubmit();
 			comSubmit.setUrl("<c:url value='/sample/openBoardList.do' />");
 			comSubmit.submit();
 		}
 
 		function fn_openBoardUpdate(){
+			if(${sessionScope.id eq map.CREA_ID} || ${sessionScope.id eq "Admin"}){
             var idx = "${map.IDX}";
             var comSubmit = new ComSubmit();
             comSubmit.setUrl("<c:url value='/sample/openBoardUpdate.do' />");
             comSubmit.addParam("IDX", idx);
 			comSubmit.submit();
+			}else{
+				alert('권한이 없습니다.');
+			}
 		}
 
 		function fn_downloadFile(obj){
@@ -151,6 +169,13 @@
 		}
 
 		function fn_reInsert(){
+
+		    if (frm.RECONTENT.value=="") {
+		        alert("댓글 내용을 입력해주세요.");
+		        frm.RECONTENT.focus();
+		        return;
+		    }
+
 			var idx = "${map.IDX}";
 			var comSubmit = new ComSubmit("frm");
 			comSubmit.setUrl("<c:url value='/sample/reInsert.do' />");
@@ -158,7 +183,8 @@
 			comSubmit.submit();
 		}
 
-		function fn_reDelete(obj){
+		function fn_reDelete(obj,rewriter){
+			if("${sessionScope.id}" == rewriter || ${sessionScope.id eq "Admin"}){
 			var idx = "${map.IDX}";
 			var reno = obj.parent().find("#RENO").val();
 			var comSubmit = new ComSubmit();
@@ -166,22 +192,26 @@
 			comSubmit.addParam("RENO",reno);
 			comSubmit.addParam("IDX",idx);
 			comSubmit.submit();
+			}else{
+				alert('권한이 없습니다.');
+			}
 		}
-		
+
 		var updateReno = updateRecontent = null;
-		function fn_reUpForm(obj){
+		function fn_reUpForm(obj,rewriter){
+			if("${sessionScope.id}" == rewriter || ${sessionScope.id eq "Admin"}){
 			var reno = obj.parent().find("#RENO").val();
 			var form = document.frm2;
 			var reply = document.getElementById("reply"+reno);
 			var replyDiv = document.getElementById("replyDiv");
 			replyDiv.style.display = "";
-			
+
 			if(updateReno){
 				document.body.appendChild(replyDiv);
 				var oldReno = document.getElementById("reply"+updateReno);
 				oldReno.innerText = updateRecontent;
 			}
-			
+
 			form.RENO.value = reno;
 			form.RECONTENT.value = reply.innerText;
 			reply.innerText = "";
@@ -189,22 +219,32 @@
 			updateReno = reno;
 			updateRecontent = form.RECONTENT.value;
 			form.RECONTENT.focus();
+			}else{
+				alert('권한이 없습니다.');
+			}
 		}
-		
+
 		function fn_reUpSave(){
+
+		    if (frm2.RECONTENT.value=="") {
+		        alert("댓글 내용을 입력해주세요.");
+		        frm2.RECONTENT.focus();
+		        return;
+		    }
+
 			var idx = "${map.IDX}";
 			var comSubmit = new ComSubmit("frm2");
 			comSubmit.setUrl("<c:url value='/sample/reInsert.do' />");
 			comSubmit.addParam("IDX",idx);
 			comSubmit.submit();
 		}
-		
+
 		function fn_reUpCancel(){
 			var form = document.form2;
 			var replyDiv = document.getElementById("replyDiv");
 			document.body.appendChild(replyDiv);
 			replyDiv.style.display = "none";
-			
+
 			var oldReno = document.getElementById("reply"+updateReno);
 			oldReno.innerText = updateRecontent;
 			updateReno = updateRecontent = null;

@@ -32,6 +32,19 @@
                     <td>${map.CREA_DTM }</td>
                 </tr>
                 <tr>
+                	<th scope="row">별점</th>
+                	<td>
+                		<p class="star_rating">
+                            <c:forEach begin="1" end="${map.STAR}" step="1">
+								<a href="#" class="on">★</a>
+							</c:forEach>
+							<c:forEach begin="${map.STAR + 1}" end="5" step="1">
+								<a href="#">★</a>
+							</c:forEach>
+						</p>
+                	</td>
+                </tr>
+                <tr>
                     <th scope="row">제목</th>
                     <td colspan="3">
                         <input type="text" id="TITLE" name="TITLE" class="wdp_90" value="${map.TITLE}"/>
@@ -96,6 +109,11 @@
 			e.preventDefault();
 			fn_deleteFile($(this));
 		});
+		$( ".star_rating a" ).click(function() {
+		     $(this).parent().children("a").removeClass("on");
+		     $(this).addClass("on").prevAll("a").addClass("on");
+		     return false;
+		});
 	});
 
 	function fn_openBoardList(){
@@ -106,7 +124,9 @@
 
 	function fn_updateBoard(){
 		var comSubmit = new ComSubmit("frm");
+		var starVal = $('.on').length;
 		comSubmit.setUrl("<c:url value='/sample/updateBoard.do' />");
+		comSubmit.addParam("STAR", starVal);
 		comSubmit.submit();
 	}
 

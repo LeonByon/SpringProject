@@ -42,6 +42,17 @@ public class SampleController {
         return mv;
     }
 
+    @RequestMapping(value="/sample/searchList.do")
+    public ModelAndView openSearchList(CommandMap commandMap) throws Exception{
+    	ModelAndView mv = new ModelAndView("/first/sample/boardList");
+
+    	Map<String,Object> resultMap = sampleService.searchList(commandMap.getMap());
+
+    	mv.addObject("paginationInfo", (PaginationInfo)resultMap.get("paginationInfo"));
+    	mv.addObject("list",resultMap.get("result"));
+
+    	return mv;
+    }
     @RequestMapping(value="/sample/testMapArgumentResolver.do")
     public ModelAndView testMapArgumentResolver(CommandMap commandMap) throws Exception{
     	ModelAndView mv = new ModelAndView("");
@@ -68,6 +79,8 @@ public class SampleController {
     	ModelAndView mv = new ModelAndView("redirect:/sample/openBoardList.do");
 
     	sampleService.insertBoard(commandMap.getMap(), request);
+
+    	mv.addObject("STAR",commandMap.get("STAR"));
 
     	return mv;
     }
@@ -102,6 +115,7 @@ public class SampleController {
     	sampleService.updateBoard(commandMap.getMap(), request);
 
     	mv.addObject("IDX",commandMap.get("IDX"));
+    	mv.addObject("STAR", commandMap.get("STAR"));
 
     	return mv;
     }
